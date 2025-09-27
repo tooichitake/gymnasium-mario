@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gymnasium-super-mario-bros"
+version = "8.0.0"
+description = "Super Mario Bros. for Gymnasium - A port of gym-super-mario-bros to the Gymnasium API"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Free For Educational Use"}
+keywords = [
+    "Gymnasium",
+    "NES", 
+    "Super-Mario-Bros",
+    "Lost-Levels",
+    "Reinforcement-Learning-Environment"
+]
+authors = [
+    {name = "Christian Kauten", email = "kautencreations@gmail.com"},
+]
+maintainers = [
+    {name = "Tooichitake", email = "tooichitake@github.com"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: Free For Educational Use",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "gymnasium>=1.1.1",
+    "nes-py>=9.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/tooichitake/gymnasium-mario"
+Repository = "https://github.com/tooichitake/gymnasium-mario"
+Original = "https://github.com/Kautenja/gym-super-mario-bros"
+Documentation = "https://github.com/tooichitake/gymnasium-mario/blob/main/README.md"
+Issues = "https://github.com/tooichitake/gymnasium-mario/issues"
+
+[project.scripts]
+gymnasium_super_mario_bros = "gymnasium_super_mario_bros._app.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gymnasium_super_mario_bros*"]
+exclude = ["tests", "*.tests", "*.tests.*"]
+
+[tool.setuptools.package-data]
+gymnasium_super_mario_bros = ["_roms/*.nes"]
