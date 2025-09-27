@@ -12,7 +12,11 @@ from gymnasium_super_mario_bros.actions import SIMPLE_MOVEMENT
 from nes_py.wrappers import JoypadSpace
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import (
-    CheckpointCallback, EvalCallback, StopTrainingOnNoModelImprovement)
+    CheckpointCallback,
+    EvalCallback,
+    StopTrainingOnNoModelImprovement,
+)
+
 # from sbx import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
@@ -25,9 +29,7 @@ class MarioWrapper(gym.ObservationWrapper):
     Complete wrapper for Super Mario Bros that combines JoypadSpace and RAM observations.
     """
 
-    def __init__(
-        self, env, crop_dim=[0, 16, 0, 13], n_stack=2, n_skip=4, actions=SIMPLE_MOVEMENT
-    ):
+    def __init__(self, env, crop_dim=[0, 16, 0, 13], n_stack=2, n_skip=4, actions=SIMPLE_MOVEMENT):
         env = JoypadSpace(env, actions)
         super().__init__(env)
 
