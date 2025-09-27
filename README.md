@@ -161,7 +161,7 @@ If you use this code in your research, please cite:
 @misc{gymnasium-mario,
   author = {tooichitake},
   title = {Mario RL Training with Grid-Based Observations},
-  year = {2024},
+  year = {2025},
   publisher = {GitHub},
   url = {https://github.com/tooichitake/gymnasium-mario}
 }
