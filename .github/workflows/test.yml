@@ -1,0 +1,73 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build
+
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake ninja
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/Library/Caches/pip
+          ~\AppData\Local\pip\Cache
+        key: pip-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel setuptools
+        pip install .
+
+    - name: Test imports
+      run: |
+        python -c "import nes_py; print('[OK] nes_py imported successfully')"
+        python -c "import gymnasium_super_mario_bros; print('[OK] gymnasium_super_mario_bros imported successfully')"
+        python -c "import gymnasium; print('[OK] gymnasium imported successfully')"
+
+    - name: Run environment test
+      run: |
+        python -c "import gymnasium as gym
+        import gymnasium_super_mario_bros
+        from nes_py.wrappers import JoypadSpace
+        from gymnasium_super_mario_bros.actions import SIMPLE_MOVEMENT
+        
+        # Create and test environment
+        env = gym.make('SuperMarioBros-v0')
+        env = JoypadSpace(env, SIMPLE_MOVEMENT)
+        obs, info = env.reset()
+        print('[OK] Environment created and reset successfully')
+        print(f'  Observation shape: {obs.shape}')
+        print(f'  Action space: {env.action_space}')
+        env.close()"
