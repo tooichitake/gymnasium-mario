@@ -366,8 +366,9 @@ def make_mario_env(
     def wrapper_fn(env):
         return MarioWrapper(env, **wrapper_kwargs)
 
-    # Use DummyVecEnv for single environment, SubprocVecEnv for multiple
-    vec_env_cls = DummyVecEnv if n_envs == 1 else SubprocVecEnv
+    # TEMPORARY TEST: Force DummyVecEnv to debug hanging issue
+    # SubprocVecEnv can cause deadlocks on Windows
+    vec_env_cls = DummyVecEnv  # Original: DummyVecEnv if n_envs == 1 else SubprocVecEnv
 
     # Create base vectorized environment with custom wrapper
     vec_env = make_vec_env(
