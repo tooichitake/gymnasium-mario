@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Deep Reinforcement Learning for Autonomous Super Mario Bros Gameplay: A Comparative Study of RL Algorithms"
+authors:
+  - family-names: "Zhao"
+    given-names: "Zhiyuan"
+  - family-names: "Yang"
+    given-names: "Ricki"
+  - family-names: "Rahman"
+    given-names: "Md Siddiqur"
+repository-code: "https://github.com/tooichitake/gymnasium-mario"
+url: "https://github.com/tooichitake/gymnasium-mario"
+abstract: "A reinforcement learning project for training AI agents to play Super Mario Bros using PPO algorithm with both grid-based (RAM) and CNN-based (visual) approaches. Implements Nature CNN and IMPALA CNN architectures in PyTorch with Stable-Baselines3."
+keywords:
+  - reinforcement-learning
+  - deep-learning
+  - super-mario-bros
+  - PPO
+  - stable-baselines3
+  - pytorch
+  - IMPALA-CNN
+  - Nature-CNN
+license: MIT
+version: 1.0.0
+date-released: 2025-01-03
