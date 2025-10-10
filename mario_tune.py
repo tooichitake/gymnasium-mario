@@ -412,35 +412,32 @@ class OptunaPruningCallback(BaseCallback):
     Reports intermediate values to Optuna, saves best model, and raises TrialPruned if trial should be pruned.
     """
 
-    def __init__(self, trial, eval_env, best_model_save_path, eval_freq=50000, n_eval_episodes=1):
+    def __init__(self, trial, eval_env, eval_freq=50000, n_eval_episodes=1):
         super().__init__()
         self.trial = trial
         self.eval_env = eval_env
-        self.best_model_save_path = best_model_save_path
         self.eval_freq = eval_freq
         self.n_eval_episodes = n_eval_episodes
         self.eval_count = 0
-        self.best_mean_reward = -np.inf
+        self.best_reward = -np.inf  # Best reward observed during training
 
     def _on_step(self) -> bool:
         if self.n_calls % self.eval_freq == 0:
             # Evaluate current model
-            mean_reward, _ = evaluate_policy(
+            eval_reward, _ = evaluate_policy(
                 self.model, self.eval_env, n_eval_episodes=self.n_eval_episodes, deterministic=True
             )
 
-            # Save best model
-            if mean_reward > self.best_mean_reward:
-                self.best_mean_reward = mean_reward
-                os.makedirs(self.best_model_save_path, exist_ok=True)
-                self.model.save(os.path.join(self.best_model_save_path, "best_model"))
+            # Track best reward (no file I/O for hyperparameter tuning)
+            if eval_reward > self.best_reward:
+                self.best_reward = eval_reward
                 print(
-                    f"Trial {self.trial.number}: New best model saved with reward {mean_reward:.2f}"
+                    f"Trial {self.trial.number}: New best reward {eval_reward:.2f} at step {self.n_calls}"
                 )
 
-            # Report to Optuna
+            # Report to Optuna (current evaluation, not best)
             self.eval_count += 1
-            self.trial.report(mean_reward, self.eval_count)
+            self.trial.report(eval_reward, self.eval_count)
 
             # Check if trial should be pruned
             if self.trial.should_prune():
@@ -519,9 +516,6 @@ def objective(trial):
     print(f"  max_grad_norm:  {max_grad_norm:.4f}")
     print("=" * 80 + "\n")
 
-    # Shared directories for all trials
-    optuna_dir = "results/optuna/ppo"
-
     # Create environments - Train on stage 1-1
     train_env = make_mario_env(
         "SuperMarioBros-1-1-v0",
@@ -545,7 +539,6 @@ def objective(trial):
     pruning_callback = OptunaPruningCallback(
         trial=trial,
         eval_env=eval_env,
-        best_model_save_path=optuna_dir,
         eval_freq=1e5 // 4,  # 100k steps / n_envs = 25k calls
         n_eval_episodes=1,
     )
@@ -590,21 +583,13 @@ def objective(trial):
         eval_env.close()
         raise
 
-    # Evaluate final performance using best model
-    best_model_path = os.path.join(optuna_dir, "best_model")
-    best_model = PPO.load(best_model_path)
-
-    mean_reward, _ = evaluate_policy(
-        best_model,
-        eval_env,
-        n_eval_episodes=1,
-        deterministic=True,
-    )
+    # Return best reward observed during training (no file I/O needed)
+    best_reward = pruning_callback.best_reward
 
     train_env.close()
     eval_env.close()
 
-    return mean_reward
+    return best_reward
 
 
 if __name__ == "__main__":
@@ -629,7 +614,7 @@ if __name__ == "__main__":
 
     study.optimize(
         objective,
-        n_trials=25,
+        n_trials=30,
         show_progress_bar=True,
         gc_after_trial=True,  # Clean up memory after each trial
     )
