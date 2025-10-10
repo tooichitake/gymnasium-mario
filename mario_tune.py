@@ -546,7 +546,7 @@ def objective(trial):
         trial=trial,
         eval_env=eval_env,
         best_model_save_path=optuna_dir,
-        eval_freq=1e5 // 4,  # 100k steps / n_envs = 12.5k calls
+        eval_freq=1e5 // 4,  # 100k steps / n_envs = 25k calls
         n_eval_episodes=1,
     )
 
@@ -611,7 +611,8 @@ if __name__ == "__main__":
     optuna_dir = "results/optuna/ppo"
     os.makedirs(optuna_dir, exist_ok=True)
 
-    storage_name = f"sqlite:///{optuna_dir}/study.db"
+    # SQLite storage with timeout to handle concurrent access
+    storage_name = f"sqlite:///{optuna_dir}/study.db?timeout=300"
 
     # Load AutoSampler from OptunaHub
     module = optunahub.load_module("samplers/auto_sampler")
@@ -626,7 +627,12 @@ if __name__ == "__main__":
         load_if_exists=True,
     )
 
-    study.optimize(objective, n_trials=50, show_progress_bar=True)
+    study.optimize(
+        objective,
+        n_trials=25,
+        show_progress_bar=True,
+        gc_after_trial=True,  # Clean up memory after each trial
+    )
 
     study_df = study.trials_dataframe()
     results_path = f"{optuna_dir}/study_results.csv"
