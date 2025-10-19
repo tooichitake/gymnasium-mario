@@ -19,12 +19,11 @@ https://github.com/user-attachments/assets/e03ec334-2270-4fac-b583-2a96c2f175cc
 
 ## 🌟 Key Features
 
-- **🎯 IMPALA CNN Architecture**: ResNet-style CNN (Espeholt et al. 2018) for visual feature extraction
-- **⚡ Optimized Frame Processing**: Frame skipping with max-pooling and frame stacking
-- **🤖 Modern RL Stack**: PPO implementation with Stable-Baselines3
-- **🔧 Hyperparameter Tuning**: Optuna integration with AutoSampler
-- **📊 Monitoring**: TensorBoard logging and automatic video recording
-- **🚄 Parallel Training**: Multiple concurrent environments for faster learning
+- **IMPALA CNN Architecture**: ResNet-style visual feature extraction
+- **PPO Algorithm**: Proximal Policy Optimization with Stable-Baselines3
+- **Hyperparameter Tuning**: Optuna optimization framework
+- **Training Scripts**: Simple train/test/continue workflow
+- **Monitoring**: TensorBoard logging and video recording
 
 ## 🛠️ Installation
 
@@ -83,10 +82,18 @@ pip install .
 ### Train with PPO
 
 ```bash
-python mario.py
+python train.py
 ```
 
-Trains on 8 random stages (World 1-2) with IMPALA CNN architecture. Models and videos are saved to `results/ppo/exp{N}/`.
+Trains on stage 1-1 with IMPALA CNN architecture. Models and logs are saved to `results/ppo/exp{N}/`.
+
+### Test Trained Model
+
+```bash
+python test.py
+```
+
+Evaluates a trained model and generates gameplay videos in `results/ppo/exp{N}/videos/`.
 
 ### Hyperparameter Tuning
 
@@ -102,7 +109,7 @@ Optimizes PPO hyperparameters using Optuna. Results saved to `results/optuna/ppo
 python start_from_checkpoint.py
 ```
 
-Resumes training from a saved checkpoint.
+Resumes training from a saved checkpoint. Edit the checkpoint path, training timesteps, and checkpoint frequency directly in the script before running.
 
 ## 🔍 CNN-Based Observations
 
@@ -113,10 +120,17 @@ Observation: 84×84×4 grayscale images
 Frame skipping: MaxAndSkipFrame (skip=4) with max-pooling
 Frame stacking: VecFrameStack (n_stack=4, consecutive)
 Preprocessing: WarpFrame (resize + grayscale)
+Noop Reset: NoopResetEnv (1-80 random no-ops on reset)
 
 CNN Architecture:
   IMPALA CNN (Espeholt et al. 2018): ResNet-style CNN → 256 features
 ```
+
+**Preprocessing Pipeline**:
+1. **NoopResetEnv**: Execute 1-80 random no-op actions on reset (adds starting position variety)
+2. **MaxAndSkipFrame**: Skip 4 frames, return max-pooled frame (reduces temporal redundancy)
+3. **WarpFrame**: Resize to 84×84 and convert to grayscale (standard Atari preprocessing)
+4. **VecFrameStack**: Stack 4 consecutive frames (provides motion information)
 
 ### IMPALA CNN Architecture
 
@@ -133,7 +147,55 @@ CNN Architecture:
 
 ## 📝 Training Scripts
 
-### `mario.py` - PPO Training
+### `train.py` - PPO Training
+
+**Features**:
+- Visual observations (84×84 grayscale)
+- IMPALA CNN architecture
+- CnnPolicy with frame stacking
+- Automatic checkpoint saving
+
+**Configuration**:
+```python
+frame_skip = 4     # Frame skipping with max-pooling
+screen_size = 84   # Resize dimension
+n_envs = 4         # Parallel environments
+total_timesteps = 2_000_000
+checkpoint_freq = 50_000
+```
+
+### `test.py` - Model Evaluation
+
+**Features**:
+- Load trained models from checkpoints
+- Visual observations (84×84 grayscale)
+- Automatic video recording
+- Episode statistics (CSV output)
+
+**Configuration**:
+```python
+checkpoint_path = "results/ppo/exp1/models/checkpoints/mario_PPO_2000000_steps.zip"
+n_episodes = 5     # Number of test episodes
+deterministic = True
+```
+
+### `start_from_checkpoint.py` - Continue Training
+
+**Features**:
+- Resume training from saved checkpoint
+- Maintains training environment configuration
+- Continues checkpoint saving
+- Preserves timestep count
+
+**Configuration**:
+```python
+checkpoint_path = "results/ppo/exp1/models/checkpoints/mario_PPO_1000000_steps.zip"
+total_timesteps = 1_000_000   # Additional training steps
+checkpoint_freq = 50_000       # Checkpoint save frequency
+n_envs = 4                     # Match original training
+```
+
+### `mario.py` - PPO Training (Legacy)
 
 **Features**:
 - Visual observations (84×84 grayscale)
@@ -203,6 +265,42 @@ Metrics include:
 - Frames per second (FPS)
 
 ## ⚙️ Advanced Configuration
+
+### Wrapper Parameters
+
+The `make_mario_env` function accepts several wrapper parameters for customizing environment behavior:
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| **frame_skip** | 4 | Number of frames to skip (action repeated). Higher = faster training but less control. |
+| **screen_size** | 84 | Resize frame to square image (84×84). Standard for Atari-style RL. |
+| **noop_max** | 80 | Maximum random no-op actions on reset. Adds stochasticity to starting positions. Set to 0 to disable. |
+| **use_single_stage_episodes** | False | If True, episode ends after completing one stage (flag captured). If False, continues to next stage (1-1 → 1-2 → ...). |
+
+**Example usage**:
+```python
+# Training: Single-stage episodes with high noop randomization
+train_env = make_mario_env(
+    "SuperMarioBros-1-1-v0",
+    wrapper_kwargs={
+        "frame_skip": 4,              # Skip 4 frames per action
+        "screen_size": 84,             # 84×84 image
+        "noop_max": 80,                # 1-80 random no-ops on reset
+        "use_single_stage_episodes": True,  # End after stage completion
+    }
+)
+
+# Testing: Disable noop for deterministic evaluation
+test_env = make_mario_env(
+    "SuperMarioBros-1-1-v0",
+    wrapper_kwargs={
+        "frame_skip": 4,
+        "screen_size": 84,
+        "noop_max": 0,                 # No random no-ops
+        "use_single_stage_episodes": True,
+    }
+)
+```
 
 ### Training Stages
 

@@ -19,7 +19,7 @@ if __name__ == "__main__":
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": True,
-            "noop_max": 30,
+            "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": True,
