@@ -480,7 +480,6 @@ def evaluate_policy(
 
         def capture_all_frames_in_skip():
             def wrapped_step(self, action):
-                nonlocal captured_frames
                 step_called_since_reset[0] = True
                 total_reward = 0.0
                 terminated = truncated = False
@@ -517,8 +516,6 @@ def evaluate_policy(
 
         def capture_noop_reset_frames():
             def wrapped_reset(self, **kwargs):
-                nonlocal captured_frames
-
                 is_auto_reset = step_called_since_reset[0]
                 should_record_noop = not is_auto_reset
 
