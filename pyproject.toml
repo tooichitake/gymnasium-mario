@@ -1,6 +1,6 @@
 [project]
 name = "gymnasium-mario-master"
-version = "0.1.0"
+version = "0.2.0"
 description = "Mario Reinforcement Learning with Grid-based Observations"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,7 +22,6 @@ classifiers = [
 dependencies = [
     "gymnasium==1.2.1",
     "stable-baselines3==2.7.0",
-    "sbx-rl==0.22.0",
     "optuna==4.5.0",
     "optunahub>=0.3.1",
     "plotly>=5.0.0",
