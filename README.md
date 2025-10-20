@@ -20,7 +20,7 @@ https://github.com/user-attachments/assets/e03ec334-2270-4fac-b583-2a96c2f175cc
 ## 🌟 Key Features
 
 - **IMPALA CNN Architecture**: ResNet-style visual feature extraction
-- **Environment Wrappers**: NoopReset, MaxAndSkip (frame skip=4), WarpFrame (84×84 grayscale), VecFrameStack (n=4)
+- **Environment Wrappers**: Random noop reset, maxpooling and frame Skip, grayscale Frame Warp, frame stack 
 - **Hyperparameter Tuning**: Distributed optimization with automatic checkpoint recovery
 - **Training Scripts**: Simple train/test/continue workflow
 - **Monitoring**: TensorBoard logging and video recording
