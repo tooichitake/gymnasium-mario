@@ -20,8 +20,8 @@ https://github.com/user-attachments/assets/e03ec334-2270-4fac-b583-2a96c2f175cc
 ## 🌟 Key Features
 
 - **IMPALA CNN Architecture**: ResNet-style visual feature extraction
-- **PPO Algorithm**: Proximal Policy Optimization with Stable-Baselines3
-- **Hyperparameter Tuning**: Optuna optimization framework
+- **Environment Wrappers**: NoopReset, MaxAndSkip (frame skip=4), WarpFrame (84×84 grayscale), VecFrameStack (n=4)
+- **Hyperparameter Tuning**: Distributed optimization with automatic checkpoint recovery
 - **Training Scripts**: Simple train/test/continue workflow
 - **Monitoring**: TensorBoard logging and video recording
 
