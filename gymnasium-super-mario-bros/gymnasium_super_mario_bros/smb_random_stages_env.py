@@ -33,8 +33,6 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
             None
 
         """
-        # create a dedicated random number generator for the environment
-        self.np_random = np.random.RandomState()
         # setup the environments
         self.envs = []
         # iterate over the worlds in the game, i.e., {1, ..., 8}
@@ -96,8 +94,8 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
             state (np.ndarray): next frame as a result of the given action
 
         """
-        # Seed the RNG for this environment.
-        self.seed(seed)
+        # Let Gymnasium manage np_random automatically
+        super().reset(seed=seed)
         # Get the collection of stages to sample from
         stages = self.stages
         if options is not None and "stages" in options:
@@ -109,8 +107,8 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
             world = int(world) - 1
             stage = int(stage) - 1
         else:
-            world = self.np_random.randint(1, 9) - 1
-            stage = self.np_random.randint(1, 5) - 1
+            world = self.np_random.integers(1, 9) - 1
+            stage = self.np_random.integers(1, 5) - 1
         # Set the environment based on the world and stage.
         self.env = self.envs[world][stage]
         # reset the environment
