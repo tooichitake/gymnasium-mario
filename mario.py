@@ -648,7 +648,7 @@ if __name__ == "__main__":
             "clip_reward": 10.0,
             "gamma": 0.982,
         },
-        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"]},
+        env_kwargs={"stages": ['1-1', '1-2', '1-3', '1-4']},
         monitor_dir=f"{log_dir}/train",
     )
 
@@ -706,7 +706,7 @@ if __name__ == "__main__":
             "training": False,
             "norm_reward": False,
         },
-        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"], "render_mode": "rgb_array"},
+        env_kwargs={"stages": ['1-1', '1-2', '1-3', '1-4'], "render_mode": "rgb_array"},
     )
 
     evaluate_policy(
