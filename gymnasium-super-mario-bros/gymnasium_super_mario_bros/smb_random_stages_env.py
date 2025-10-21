@@ -21,13 +21,14 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
     # action space is a bitmap of button press values for the 8 NES buttons
     action_space = SuperMarioBrosEnv.action_space
 
-    def __init__(self, rom_mode="vanilla", stages=None):
+    def __init__(self, rom_mode="vanilla", stages=None, render_mode=None):
         """
         Initialize a new Super Mario Bros environment.
 
         Args:
             rom_mode (str): the ROM mode to use when loading ROMs from disk
             stages (list): select stages at random from a specific subset
+            render_mode (str): the mode to render with (None, 'human', or 'rgb_array')
 
         Returns:
             None
@@ -43,8 +44,8 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
             for stage in range(1, 5):
                 # create the target as a tuple of the world and stage
                 target = (world, stage)
-                # create the environment with the given ROM mode
-                env = SuperMarioBrosEnv(rom_mode=rom_mode, target=target)
+                # create the environment with the given ROM mode and render mode
+                env = SuperMarioBrosEnv(rom_mode=rom_mode, target=target, render_mode=render_mode)
                 # add the environment to the stage list for this world
                 self.envs[-1].append(env)
         # create a placeholder for the current environment
@@ -148,21 +149,15 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
         if self.viewer is not None:
             self.viewer.close()
 
-    def render(self, mode="human"):
+    def render(self):
         """
         Render the environment.
 
-        Args:
-            mode (str): the mode to render with:
-            - human: render to the current display
-            - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
-              representing RGB values for an x-by-y pixel image
-
         Returns:
-            a numpy array if mode is 'rgb_array', None otherwise
+            a numpy array if render_mode is 'rgb_array', None otherwise
 
         """
-        return SuperMarioBrosEnv.render(self, mode=mode)
+        return self.env.render()
 
     def get_keys_to_action(self):
         """Return the dictionary of keyboard keys to actions."""
