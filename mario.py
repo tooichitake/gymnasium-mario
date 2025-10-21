@@ -637,7 +637,7 @@ if __name__ == "__main__":
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": False,
+            "use_single_stage_episodes": True,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
@@ -648,7 +648,7 @@ if __name__ == "__main__":
             "clip_reward": 10.0,
             "gamma": 0.982,
         },
-        env_kwargs={"stages": ['1-1', '1-2', '1-3', '1-4']},
+        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"]},
         monitor_dir=f"{log_dir}/train",
     )
 
@@ -699,14 +699,14 @@ if __name__ == "__main__":
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": False,
+            "use_single_stage_episodes": True,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": False,
             "norm_reward": False,
         },
-        env_kwargs={"stages": ['1-1', '1-2', '1-3', '1-4'], "render_mode": "rgb_array"},
+        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"], "render_mode": "rgb_array"},
     )
 
     evaluate_policy(
