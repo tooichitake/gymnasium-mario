@@ -357,7 +357,7 @@ If you use this code in your research, please cite:
 ```bibtex
 @software{zhao2025marioPPO,
   author = {Zhao, Zhiyuan},
-  title = {Deep Reinforcement Learning for Autonomous Super Mario Bros Gameplay: A Comparative Study of RL Algorithms},
+  title = {Gymnasium Mario},
   year = {2025},
   publisher = {GitHub},
   url = {https://github.com/tooichitake/gymnasium-mario}
