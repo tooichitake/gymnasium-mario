@@ -632,12 +632,12 @@ if __name__ == "__main__":
     exp_num, exp_dir, model_dir, log_dir, video_dir = create_experiment_folder()
 
     train_env = make_mario_env(
-        "SuperMarioBrosRandomStages-v0",
+        "SuperMarioBros-1-1-v0",
         n_envs=4,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": True,
+            "use_single_stage_episodes": False,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
@@ -648,7 +648,6 @@ if __name__ == "__main__":
             "clip_reward": 10.0,
             "gamma": 0.982,
         },
-        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"]},
         monitor_dir=f"{log_dir}/train",
     )
 
@@ -695,18 +694,18 @@ if __name__ == "__main__":
     )
 
     test_env = make_mario_env(
-        "SuperMarioBrosRandomStages-v0",
+        "SuperMarioBros-1-1-v0",
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": True,
+            "use_single_stage_episodes": False,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": False,
             "norm_reward": False,
         },
-        env_kwargs={"stages": ["1-1", "1-2", "1-3", "1-4"], "render_mode": "rgb_array"},
+        env_kwargs={"render_mode": "rgb_array"},
     )
 
     evaluate_policy(

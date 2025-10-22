@@ -343,8 +343,6 @@ Uses VecNormalize for reward normalization:
 
 ### Authors
 - **Zhiyuan Zhao**
-- **Ricki Yang**
-- **Md Siddiqur Rahman**
 
 **Key Contributions**:
 - PyTorch implementation of IMPALA CNN for Stable-Baselines3
@@ -358,7 +356,7 @@ GitHub Repository: https://github.com/tooichitake/gymnasium-mario
 If you use this code in your research, please cite:
 ```bibtex
 @software{zhao2025marioPPO,
-  author = {Zhao, Zhiyuan and Yang, Ricki and Rahman, Md Siddiqur},
+  author = {Zhao, Zhiyuan},
   title = {Deep Reinforcement Learning for Autonomous Super Mario Bros Gameplay: A Comparative Study of RL Algorithms},
   year = {2025},
   publisher = {GitHub},
