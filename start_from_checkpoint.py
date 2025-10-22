@@ -10,12 +10,11 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from mario import make_mario_env
 
 if __name__ == "__main__":
+    # Define checkpoint path once
+    checkpoint_path = "results/ppo/exp4/models/checkpoints/mario_PPO_2600000_steps.zip"
+
     # Extract experiment directory from checkpoint path
-    exp_dir = os.path.dirname(
-        os.path.dirname(
-            os.path.dirname("results/ppo/exp1/models/checkpoints/mario_PPO_1000000_steps.zip")
-        )
-    )
+    exp_dir = os.path.dirname(os.path.dirname(os.path.dirname(checkpoint_path)))
     model_dir = os.path.join(exp_dir, "models")
     log_dir = os.path.join(exp_dir, "logs")
 
@@ -26,7 +25,7 @@ if __name__ == "__main__":
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": True,
+            "use_single_stage_episodes": False,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
@@ -41,9 +40,7 @@ if __name__ == "__main__":
     )
 
     # Load model
-    model = PPO.load(
-        "results/ppo/exp1/models/checkpoints/mario_PPO_1000000_steps.zip", env=train_env
-    )
+    model = PPO.load(checkpoint_path, env=train_env)
 
     # Setup checkpoint callback
     checkpoint_callback = CheckpointCallback(
@@ -55,7 +52,7 @@ if __name__ == "__main__":
 
     # Continue training
     model.learn(
-        total_timesteps=1_000_000,
+        total_timesteps=1e7,
         callback=[checkpoint_callback],
         tb_log_name="mario_PPO",
         progress_bar=True,

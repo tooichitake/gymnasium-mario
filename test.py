@@ -9,10 +9,9 @@ from stable_baselines3 import PPO
 from mario import evaluate_policy, make_mario_env
 
 if __name__ == "__main__":
-    # Auto-detect video directory from model path
-    path_parts = os.path.normpath(
-        "results/ppo/exp1/models/checkpoints/mario_PPO_2000000_steps.zip"
-    ).split(os.sep)
+    checkpoint_path = "results/ppo/exp4/models/checkpoints/mario_PPO_2600000_steps.zip"
+
+    path_parts = os.path.normpath(checkpoint_path).split(os.sep)
     if "results" in path_parts and "ppo" in path_parts:
         results_idx = path_parts.index("results")
         ppo_idx = path_parts.index("ppo")
@@ -24,7 +23,7 @@ if __name__ == "__main__":
         exp_dir = None
 
     # Load model
-    model = PPO.load("results/ppo/exp1/models/checkpoints/mario_PPO_2000000_steps.zip")
+    model = PPO.load(checkpoint_path)
 
     # Create test environment
     test_env = make_mario_env(
@@ -32,7 +31,7 @@ if __name__ == "__main__":
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
-            "use_single_stage_episodes": True,
+            "use_single_stage_episodes": False,
             "noop_max": 80,
         },
         vec_normalize_kwargs={
