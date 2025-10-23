@@ -9,7 +9,7 @@ from stable_baselines3 import PPO
 from mario import evaluate_policy, make_mario_env
 
 if __name__ == "__main__":
-    checkpoint_path = "results/ppo/exp4/models/checkpoints/mario_PPO_2600000_steps.zip"
+    checkpoint_path = "results\ppo\exp5\models\checkpoints\mario_PPO_6400000_steps.zip"
 
     path_parts = os.path.normpath(checkpoint_path).split(os.sep)
     if "results" in path_parts and "ppo" in path_parts:
@@ -32,7 +32,7 @@ if __name__ == "__main__":
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 80,
+            "noop_max": 0,
         },
         vec_normalize_kwargs={
             "training": False,

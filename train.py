@@ -26,7 +26,7 @@ if __name__ == "__main__":
             "norm_obs": False,
             "norm_reward": True,
             "clip_obs": 10.0,
-            "clip_reward": 10.0,
+            "clip_reward": 50.0,
             "gamma": 0.982,
         },
         monitor_dir=f"{log_dir}/train",

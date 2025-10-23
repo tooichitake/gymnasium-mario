@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 import torch as th
 import torch.nn as nn
-from gymnasium import spaces
 from gymnasium_super_mario_bros.actions import SIMPLE_MOVEMENT
 from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
 from nes_py.wrappers import JoypadSpace
@@ -19,7 +18,6 @@ from stable_baselines3.common.atari_wrappers import WarpFrame
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
-from stable_baselines3.common.utils import LinearSchedule
 from stable_baselines3.common.vec_env import (
     DummyVecEnv,
     VecFrameStack,
@@ -317,7 +315,7 @@ def make_mario_env(
             - norm_obs: False
             - norm_reward: True
             - clip_obs: 10.0
-            - clip_reward: 10.0
+            - clip_reward: 50.0
             - gamma: 0.982
         env_kwargs: Dict passed to gym.make(), e.g., {"stages": ['1-1', '1-2'], "render_mode": "rgb_array"}
         **kwargs: Additional arguments passed to make_vec_env
@@ -402,7 +400,7 @@ def make_mario_env(
             "norm_obs": False,
             "norm_reward": True,
             "clip_obs": 10.0,
-            "clip_reward": 10.0,
+            "clip_reward": 50.0,
             "gamma": 0.982,
         }
         default_vec_normalize_kwargs.update(vec_normalize_kwargs)
@@ -633,26 +631,26 @@ if __name__ == "__main__":
 
     train_env = make_mario_env(
         "SuperMarioBros-1-1-v0",
-        n_envs=4,
+        n_envs=8,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 80,
+            "noop_max": 0,
         },
         vec_normalize_kwargs={
             "training": True,
             "norm_obs": False,
             "norm_reward": True,
             "clip_obs": 10.0,
-            "clip_reward": 10.0,
+            "clip_reward": 50.0,
             "gamma": 0.982,
         },
         monitor_dir=f"{log_dir}/train",
     )
 
     checkpoint_callback = CheckpointCallback(
-        save_freq=50000,
+        save_freq=25000,
         save_path=f"{model_dir}/checkpoints",
         name_prefix="mario_PPO",
         verbose=1,
@@ -687,7 +685,7 @@ if __name__ == "__main__":
     )
 
     model.learn(
-        total_timesteps=5e6,
+        total_timesteps=1e7,
         callback=callbacks,
         tb_log_name="mario_PPO",
         progress_bar=True,
@@ -699,7 +697,7 @@ if __name__ == "__main__":
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 80,
+            "noop_max": 0,
         },
         vec_normalize_kwargs={
             "training": False,

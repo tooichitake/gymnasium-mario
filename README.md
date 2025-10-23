@@ -324,20 +324,19 @@ eval_env = make_mario_env(
 
 ### Reward Function
 
-The reward function is: **r = v + c + d** (clipped to [-15, 15])
+The reward function is: **r = x_reward + coin_reward + power_level_reward + time_penalty + death_penalty**
 
-| Component | Description | Value |
+| Component | Description | Range |
 |-----------|-------------|-------|
-| **v** (Velocity) | Horizontal movement | `x1 - x0` |
-| **c** (Clock) | Time penalty | `c0 - c1` |
-| **d** (Death) | Death penalty | -15 |
+| **x_reward** | Horizontal movement: `x1 - x0`<br>- Capped at +10<br>- **Doubled** when exploring new areas (max +20)<br>- **+25** when entering new stage | [0, 25] |
+| **coin_reward** | Coin collection: `(coins1 - coins0) × 0.5` | [0, ~2.5] |
+| **power_level_reward** | Power level change: `(power1 - power0) × 10` | [-10, +10] |
+| **time_penalty** | Time tick: `-0.1` per step<br>Time exhausted: `-25` | [-25, -0.1] |
+| **death_penalty** | Death: `-25`<br>Alive: `0` | [-25, 0] |
 
 ### Reward Normalization
 
-Uses VecNormalize for reward normalization:
-- Normalizes by standard deviation of discounted returns
-- Gamma = 0.99
-- Clip range = [-10, 10]
+Uses VecNormalize for reward normalization with gamma = 0.982 and clip range = [-50, +50].
 
 ## 👏 Credits
 
