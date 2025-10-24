@@ -233,8 +233,7 @@ if __name__ == "__main__":
 
     study.optimize(
         objective,
-        # n_trials=30,
-        n_trials=2,
+        n_trials=30,
         show_progress_bar=True,
         gc_after_trial=True,
     )

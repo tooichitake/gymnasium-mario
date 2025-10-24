@@ -27,7 +27,7 @@ if __name__ == "__main__":
             "norm_reward": True,
             "clip_obs": 10.0,
             "clip_reward": 50.0,
-            "gamma": 0.982,
+            "gamma": 0.99,
         },
         monitor_dir=f"{log_dir}/train",
     )
@@ -45,15 +45,15 @@ if __name__ == "__main__":
         "CnnPolicy",
         train_env,
         n_steps=4096,
-        batch_size=64,
+        batch_size=512,
         n_epochs=10,
-        learning_rate=1.4e-5,
-        gamma=0.982,
-        gae_lambda=0.901,
-        ent_coef=1.81e-3,
-        clip_range=0.335,
+        learning_rate=2.5e-4,
+        gamma=0.99,
+        gae_lambda=0.95,
+        ent_coef=1.8e-3,
+        clip_range=0.2,
         vf_coef=0.643,
-        max_grad_norm=0.578,
+        max_grad_norm=0.5,
         policy_kwargs=dict(
             features_extractor_class=ImpalaCNN,
             features_extractor_kwargs=dict(
@@ -61,14 +61,14 @@ if __name__ == "__main__":
                 channels=[16, 32, 32],
                 normalized_image=False,
             ),
+            net_arch=[],
         ),
         verbose=0,
         tensorboard_log=f"{log_dir}/tensorboard",
     )
 
-    # Train the model
     model.learn(
-        total_timesteps=2_000_000,
+        total_timesteps=1e7,
         callback=[checkpoint_callback],
         tb_log_name="mario_PPO",
         progress_bar=True,

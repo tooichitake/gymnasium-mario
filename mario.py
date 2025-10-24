@@ -631,7 +631,7 @@ if __name__ == "__main__":
 
     train_env = make_mario_env(
         "SuperMarioBros-1-1-v0",
-        n_envs=8,
+        n_envs=4,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
@@ -644,7 +644,7 @@ if __name__ == "__main__":
             "norm_reward": True,
             "clip_obs": 10.0,
             "clip_reward": 50.0,
-            "gamma": 0.982,
+            "gamma": 0.99,
         },
         monitor_dir=f"{log_dir}/train",
     )
@@ -662,15 +662,15 @@ if __name__ == "__main__":
         "CnnPolicy",
         train_env,
         n_steps=4096,
-        batch_size=64,
+        batch_size=512,
         n_epochs=10,
-        learning_rate=1.4e-5,
-        gamma=0.982,
-        gae_lambda=0.901,
-        ent_coef=1.81e-3,
-        clip_range=0.335,
+        learning_rate=2.5e-4,
+        gamma=0.99,
+        gae_lambda=0.95,
+        ent_coef=0.01,
+        clip_range=0.2,
         vf_coef=0.643,
-        max_grad_norm=0.578,
+        max_grad_norm=0.5,
         policy_kwargs=dict(
             features_extractor_class=ImpalaCNN,
             features_extractor_kwargs=dict(
@@ -678,7 +678,7 @@ if __name__ == "__main__":
                 channels=[16, 32, 32],
                 normalized_image=False,
             ),
-            net_arch=dict(pi=[256], vf=[256]),
+            net_arch=[],
         ),
         verbose=0,
         tensorboard_log=os.path.join(log_dir, "tensorboard"),
@@ -710,7 +710,7 @@ if __name__ == "__main__":
         model,
         test_env,
         video_dir=video_dir,
-        n_episodes=5,
+        n_episodes=1,
         results_path=os.path.join(log_dir, "test", "test_results.csv"),
         model_dir=model_dir,
     )

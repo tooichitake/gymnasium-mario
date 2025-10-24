@@ -34,7 +34,7 @@ if __name__ == "__main__":
             "norm_reward": True,
             "clip_obs": 10.0,
             "clip_reward": 50.0,
-            "gamma": 0.982,
+            "gamma": 0.99,
         },
         monitor_dir=f"{log_dir}/train",
     )

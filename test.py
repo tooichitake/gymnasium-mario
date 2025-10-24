@@ -9,7 +9,7 @@ from stable_baselines3 import PPO
 from mario import evaluate_policy, make_mario_env
 
 if __name__ == "__main__":
-    checkpoint_path = "results\ppo\exp5\models\checkpoints\mario_PPO_6400000_steps.zip"
+    checkpoint_path = "results\ppo\exp7\models\checkpoints\mario_PPO_8100000_steps.zip"
 
     path_parts = os.path.normpath(checkpoint_path).split(os.sep)
     if "results" in path_parts and "ppo" in path_parts:
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         model,
         test_env,
         video_dir=os.path.join(exp_dir, "videos") if exp_dir else "test_videos",
-        n_episodes=5,
+        n_episodes=1,
         deterministic=True,
         results_path=(
             os.path.join(exp_dir, "logs", "test", "test_results.csv")

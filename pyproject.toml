@@ -8,7 +8,16 @@ license = "MIT"
 authors = [
     {name = "Zhiyuan Zhao"},
 ]
-keywords = ["reinforcement-learning", "mario", "gymnasium", "PPO"]
+keywords = [
+    "reinforcement-learning", "deep-reinforcement-learning", "PPO", "stable-baselines3",
+    "proximal-policy-optimization", "policy-gradient", "actor-critic", "hyperparameter-tuning",
+    "mario", "super-mario-bros", "gymnasium", "atari", "game-ai", "retro-games",
+    "IMPALA", "CNN", "computer-vision", "pytorch", "neural-networks",
+    "autonomous-agents", "video-game-bot", "AI-training", "machine-learning",
+    "optuna", "tensorboard", "nes-emulator",
+    "reward-shaping", "frame-stacking", "environment-wrappers", "curriculum-learning",
+    "benchmark", "rl-benchmark", "baseline", "reproducibility", "performance-evaluation"
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
