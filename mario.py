@@ -18,6 +18,7 @@ from stable_baselines3.common.atari_wrappers import WarpFrame
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
+from stable_baselines3.common.utils import LinearSchedule
 from stable_baselines3.common.vec_env import (
     DummyVecEnv,
     VecFrameStack,
@@ -631,7 +632,7 @@ if __name__ == "__main__":
 
     train_env = make_mario_env(
         "SuperMarioBros-1-1-v0",
-        n_envs=4,
+        n_envs=8,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
@@ -642,7 +643,6 @@ if __name__ == "__main__":
             "training": True,
             "norm_obs": False,
             "norm_reward": True,
-            "clip_obs": 10.0,
             "clip_reward": 50.0,
             "gamma": 0.99,
         },
@@ -650,7 +650,7 @@ if __name__ == "__main__":
     )
 
     checkpoint_callback = CheckpointCallback(
-        save_freq=25000,
+        save_freq=12500,
         save_path=f"{model_dir}/checkpoints",
         name_prefix="mario_PPO",
         verbose=1,
@@ -661,24 +661,24 @@ if __name__ == "__main__":
     model = PPO(
         "CnnPolicy",
         train_env,
-        n_steps=4096,
-        batch_size=512,
+        n_steps=2048,
+        batch_size=128,
         n_epochs=10,
-        learning_rate=2.5e-4,
+        learning_rate=1e-5,
         gamma=0.99,
         gae_lambda=0.95,
         ent_coef=0.01,
         clip_range=0.2,
-        vf_coef=0.643,
-        max_grad_norm=0.5,
+        vf_coef=0.6,
+        target_kl=0.01,
         policy_kwargs=dict(
             features_extractor_class=ImpalaCNN,
             features_extractor_kwargs=dict(
                 features_dim=256,
-                channels=[16, 32, 32],
+                channels=[32, 64, 64],
                 normalized_image=False,
             ),
-            net_arch=[],
+            net_arch=dict(pi=[128, 128], vf=[128, 128]),
         ),
         verbose=0,
         tensorboard_log=os.path.join(log_dir, "tensorboard"),
