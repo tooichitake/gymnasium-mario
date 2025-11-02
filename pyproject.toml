@@ -1,23 +1,14 @@
 [project]
 name = "gymnasium-mario-master"
-version = "0.2.0"
+version = "0.1.0"
 description = "Mario Reinforcement Learning with Grid-based Observations"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
-    {name = "Zhiyuan Zhao"},
+    {name = "tooichitake"},
 ]
-keywords = [
-    "reinforcement-learning", "deep-reinforcement-learning", "PPO", "stable-baselines3",
-    "proximal-policy-optimization", "policy-gradient", "actor-critic", "hyperparameter-tuning",
-    "mario", "super-mario-bros", "gymnasium", "atari", "game-ai", "retro-games",
-    "IMPALA", "CNN", "computer-vision", "pytorch", "neural-networks",
-    "autonomous-agents", "video-game-bot", "AI-training", "machine-learning",
-    "optuna", "tensorboard", "nes-emulator",
-    "reward-shaping", "frame-stacking", "environment-wrappers", "curriculum-learning",
-    "benchmark", "rl-benchmark", "baseline", "reproducibility", "performance-evaluation"
-]
+keywords = ["reinforcement-learning", "mario", "gymnasium", "PPO"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -25,29 +16,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "gymnasium==1.2.1",
-    "stable-baselines3==2.7.0",
-    "optuna==4.5.0",
-    "optunahub>=0.3.1",
-    "plotly>=5.0.0",
-    "cmaes>=0.12.0",
-    "scikit-learn>=1.7.2",
-    "moviepy>=1.0.0",
-    "matplotlib>=3.0",
-    "opencv-python-headless>=4.12.0",
-    "seaborn>=0.13",
-    "tensorboard>=2.9.1",
-    "pygame",
-    "psutil",
-    "tqdm",
-    "rich",
-    "ale-py>=0.9.0",
-    "pillow",
-    "pandas",
+    "gymnasium[other]==1.2.1",
+    "stable-baselines3[extra]==2.7.0",
+    "sbx-rl==0.22.0",
     "nes-py @ git+https://github.com/tooichitake/gymnasium-mario.git#subdirectory=nes-py",
     "gymnasium-super-mario-bros @ git+https://github.com/tooichitake/gymnasium-mario.git#subdirectory=gymnasium-super-mario-bros",
 ]
@@ -67,12 +41,28 @@ Issues = "https://github.com/tooichitake/gymnasium-mario/issues"
 requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.poetry]
+packages = []  # This tells Poetry not to look for packages
+
+[tool.poetry.dependencies]
+python = "^3.10"
+gymnasium = {extras = ["other"], version = "1.2.1"}
+stable-baselines3 = {extras = ["extra"], version = "2.7.0"}
+sbx-rl = "0.22.0"
+nes-py = {git = "https://github.com/tooichitake/gymnasium-mario.git", subdirectory = "nes-py"}
+gymnasium-super-mario-bros = {git = "https://github.com/tooichitake/gymnasium-mario.git", subdirectory = "gymnasium-super-mario-bros"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0.0"
+isort = "^5.13.0"
+flake8 = "^7.0.0"
+
 [tool.setuptools]
 py-modules = []
 
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312', 'py313']
+target-version = ['py310', 'py311', 'py312']
 
 [tool.isort]
 profile = "black"
