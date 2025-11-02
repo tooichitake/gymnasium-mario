@@ -12,7 +12,7 @@
 
 ## 🎬 Trained Agent Demo
 
-Watch our PPO agent playing Super Mario Bros after training:
+Watch our A2C agent playing Super Mario Bros after training:
 
 https://github.com/user-attachments/assets/e03ec334-2270-4fac-b583-2a96c2f175cc
 
@@ -72,7 +72,7 @@ This repository provides two complementary approaches for training Mario agents:
 
 ```bash
 # Clone the repository
-git clone https://github.com/tooichitake/gymnasium-mario.git
+git clone https://github.com/SiddiqurRahman3802/gymnasium-mario.git
 cd gymnasium-mario
 
 # Create conda environment
