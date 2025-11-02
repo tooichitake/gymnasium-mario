@@ -14,7 +14,7 @@
 
 Watch our A2C agent playing Super Mario Bros after training:
 
-https://github.com/user-attachments/assets/e03ec334-2270-4fac-b583-2a96c2f175cc
+https://github.com/user-attachments/assets/c2bb0f7c-6ccb-460c-95b9-df79760814e7
 
 *Agent trained with CNN-based observations (video appears 4x speed due to frame_skip=4)*
 
