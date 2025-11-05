@@ -172,7 +172,9 @@ class PPO_KS(PPO):
                 if self.target_kl is not None and approx_kl_div > 1.5 * self.target_kl:
                     continue_training = False
                     if self.verbose >= 1:
-                        print(f"Early stopping at step {epoch} due to reaching max kl: {approx_kl_div:.2f}")
+                        print(
+                            f"Early stopping at step {epoch} due to reaching max kl: {approx_kl_div:.2f}"
+                        )
                     break
 
                 # Optimization step
@@ -189,7 +191,6 @@ class PPO_KS(PPO):
         explained_var = explained_variance(
             self.rollout_buffer.values.flatten(), self.rollout_buffer.returns.flatten()
         )
-
         self.logger.record("train/entropy_loss", np.mean(entropy_losses))
         self.logger.record("train/policy_gradient_loss", np.mean(pg_losses))
         self.logger.record("train/value_loss", np.mean(value_losses))
@@ -222,7 +223,12 @@ if __name__ == "__main__":
         "SuperMarioBros-1-1-v0",
         n_envs=8,
         wrapper_kwargs={"frame_skip": 4, "screen_size": 84, "noop_max": 0},
-        vec_normalize_kwargs={"training": True, "norm_obs": False, "norm_reward": True, "gamma": 0.99},
+        vec_normalize_kwargs={
+            "training": True,
+            "norm_obs": False,
+            "norm_reward": True,
+            "gamma": 0.99,
+        },
         monitor_dir=f"{log_dir}/train",
     )
 

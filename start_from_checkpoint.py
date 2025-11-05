@@ -39,8 +39,8 @@ if __name__ == "__main__":
 
     model = PPO.load(checkpoint_path, env=train_env)
 
-    model.target_kl = 0.02  
-    model.ent_coef = 0.05   
+    model.target_kl = 0.02
+    model.ent_coef = 0.05
 
     model.batch_size = 2048
 
