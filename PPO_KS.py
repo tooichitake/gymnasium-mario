@@ -3,9 +3,6 @@ Fine-tune pretrained Mario model using Kickstarting (KS) for knowledge retention
 
 KS adds an auxiliary KL divergence loss that keeps the fine-tuned policy close to
 the pretrained policy, preventing catastrophic forgetting while adapting to the new task.
-
-Reference: "Fine-tuning Reinforcement Learning Models is Secretly a Forgetting
-Mitigation Problem" (ICML 2024 Spotlight)
 """
 
 import os
