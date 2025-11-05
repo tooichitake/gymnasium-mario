@@ -18,7 +18,6 @@ from stable_baselines3.common.atari_wrappers import WarpFrame
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
-from stable_baselines3.common.utils import LinearSchedule
 from stable_baselines3.common.vec_env import (
     DummyVecEnv,
     VecFrameStack,
@@ -368,7 +367,7 @@ def make_mario_env(
         wrapper_kwargs = {}
     wrapper_kwargs.setdefault("frame_skip", 4)
     wrapper_kwargs.setdefault("screen_size", 84)
-    wrapper_kwargs.setdefault("noop_max", 30)
+    wrapper_kwargs.setdefault("noop_max", 0)
     wrapper_kwargs.setdefault("use_single_stage_episodes", False)
 
     if env_kwargs is None:
@@ -631,13 +630,13 @@ if __name__ == "__main__":
     exp_num, exp_dir, model_dir, log_dir, video_dir = create_experiment_folder()
 
     train_env = make_mario_env(
-        "SuperMarioBros-1-1-v0",
+        "SuperMarioBrosRandomStages-v0",  # Random stages (all 32 stages)
         n_envs=8,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 0,
+            "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": True,
@@ -661,16 +660,15 @@ if __name__ == "__main__":
     model = PPO(
         "CnnPolicy",
         train_env,
-        n_steps=2048,
-        batch_size=128,
-        n_epochs=10,
+        n_steps=4096,
+        batch_size=64,
+        n_epochs=8,
         learning_rate=1e-5,
         gamma=0.99,
         gae_lambda=0.95,
         ent_coef=0.01,
         clip_range=0.2,
-        vf_coef=0.6,
-        target_kl=0.01,
+        vf_coef=0.5,
         policy_kwargs=dict(
             features_extractor_class=ImpalaCNN,
             features_extractor_kwargs=dict(
@@ -685,7 +683,7 @@ if __name__ == "__main__":
     )
 
     model.learn(
-        total_timesteps=1e7,
+        total_timesteps=2e7,
         callback=callbacks,
         tb_log_name="mario_PPO",
         progress_bar=True,
@@ -697,7 +695,7 @@ if __name__ == "__main__":
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 0,
+            "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": False,

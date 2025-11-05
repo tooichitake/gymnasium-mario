@@ -10,20 +10,21 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from mario import make_mario_env
 
 if __name__ == "__main__":
-    checkpoint_path = "results/ppo/exp1/models/checkpoints/mario_PPO_5000000_steps.zip"
+    checkpoint_path = "results\ppo\exp_ks_1-1-2\models\checkpoints\mario_PPO_KS_10700000_steps.zip"
 
     exp_dir = os.path.dirname(os.path.dirname(os.path.dirname(checkpoint_path)))
     model_dir = os.path.join(exp_dir, "models")
     log_dir = os.path.join(exp_dir, "logs")
 
+    # Random environment with all 32 stages (default: World 1-8, all 4 stages per world)
     train_env = make_mario_env(
-        "SuperMarioBros-1-1-v0",
+        "SuperMarioBrosRandomStages-v0",
         n_envs=8,
         wrapper_kwargs={
             "frame_skip": 4,
             "screen_size": 84,
             "use_single_stage_episodes": False,
-            "noop_max": 0,
+            "noop_max": 80,
         },
         vec_normalize_kwargs={
             "training": True,
@@ -38,7 +39,11 @@ if __name__ == "__main__":
 
     model = PPO.load(checkpoint_path, env=train_env)
 
-    # Set tensorboard log path for continued training
+    model.target_kl = 0.02  
+    model.ent_coef = 0.05   
+
+    model.batch_size = 2048
+
     model.tensorboard_log = os.path.join(log_dir, "tensorboard")
 
     checkpoint_callback = CheckpointCallback(
@@ -53,7 +58,7 @@ if __name__ == "__main__":
         callback=[checkpoint_callback],
         tb_log_name="mario_PPO",
         progress_bar=True,
-        reset_num_timesteps=False,
+        reset_num_timesteps=True,
     )
 
     train_env.close()
